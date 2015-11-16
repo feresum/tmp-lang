@@ -161,20 +161,20 @@ template<class A, class B> struct EqN {};  //Equal no eval
 template<class A, class B> struct Eval<EqN<A,B> > {
     typedef F value;
 };
-template<class A> struct EqN<A, A> {
+template<class A> struct Eval<EqN<A,A> > {
     typedef T value;
 };
 
 template<class A, class B> struct Eq {};
 template<class A, class B> struct Eval<Eq<A,B> > {
-    typedef EqN<Eval<A>, Eval<B> > value;
+    typedef typename Eval<EqN<typename Eval<A>::value, typename Eval<B>::value> >::value value;
 };
 
 
 
 template<class A, class B> struct And {};
 template<class A, class B> struct Eval<And<A, B> > {
-    typedef typename Eval<If<A, T, Bln<B> > >::value value;
+    typedef typename Eval<If<A, Bln<B>, F> >::value value;
 };
 
 template<class N> struct Abs {};
