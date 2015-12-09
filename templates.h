@@ -1,4 +1,5 @@
 #include <cinttypes>
+#include <type_traits>
 #include <stddef.h>
 
 typedef int64_t IntType;
@@ -48,6 +49,62 @@ template<class A, class B> struct Eval<Div<A,B> > {
     typedef typename Eval<Div<typename Eval<A>::value, typename Eval<B>::value> >::value value;
 };
 
+template<class A, class B> struct Rem {};
+template<IntType a, IntType b> struct Eval<Rem<Int<a>, Int<b> > > {
+    typedef Int<a % b> value;
+};
+template<class A, class B> struct Eval<Rem<A,B> > {
+    typedef typename Eval<Rem<typename Eval<A>::value, typename Eval<B>::value> >::value value;
+};
+
+template<class A, class B> struct Xor {};
+template<IntType a, IntType b> struct Eval<Xor<Int<a>, Int<b> > > {
+    typedef Int<a ^ b> value;
+};
+template<class A, class B> struct Eval<Xor<A,B> > {
+    typedef typename Eval<Xor<typename Eval<A>::value, typename Eval<B>::value> >::value value;
+};
+
+template<class A, class B> struct bnd {};
+template<IntType a, IntType b> struct Eval<bnd<Int<a>, Int<b> > > {
+    typedef Int<a & b> value;
+};
+template<class A, class B> struct Eval<bnd<A,B> > {
+    typedef typename Eval<bnd<typename Eval<A>::value, typename Eval<B>::value> >::value value;
+};
+
+template<class A, class B> struct bor {};
+template<IntType a, IntType b> struct Eval<bor<Int<a>, Int<b> > > {
+    typedef Int<a | b> value;
+};
+template<class A, class B> struct Eval<bor<A,B> > {
+    typedef typename Eval<bor<typename Eval<A>::value, typename Eval<B>::value> >::value value;
+};
+
+template<class A, class B> struct lsl {};
+template<IntType a, IntType b> struct Eval<lsl<Int<a>, Int<b> > > {
+    typedef Int<std::make_unsigned<IntType>::type(a) << b> value;
+};
+template<class A, class B> struct Eval<lsl<A,B> > {
+    typedef typename Eval<lsl<typename Eval<A>::value, typename Eval<B>::value> >::value value;
+};
+
+template<class A, class B> struct lsr {};
+template<IntType a, IntType b> struct Eval<lsr<Int<a>, Int<b> > > {
+    typedef Int<(std::make_unsigned<IntType>::type(a) >> b)> value;
+};
+template<class A, class B> struct Eval<lsr<A,B> > {
+    typedef typename Eval<lsr<typename Eval<A>::value, typename Eval<B>::value> >::value value;
+};
+
+template<class A, class B> struct asr {};
+template<IntType a, IntType b> struct Eval<asr<Int<a>, Int<b> > > {
+    typedef Int<(a >> b)> value;
+};
+template<class A, class B> struct Eval<asr<A,B> > {
+    typedef typename Eval<asr<typename Eval<A>::value, typename Eval<B>::value> >::value value;
+};
+
 
 template<class A> struct Neg {};
 template<IntType a> struct Eval<Neg<Int<a> > > {
@@ -55,6 +112,14 @@ template<IntType a> struct Eval<Neg<Int<a> > > {
 };
 template<class A> struct Eval<Neg<A> > {
     typedef typename Eval<Neg<typename Eval<A>::value > >::value value;
+};
+
+template<class A> struct bno {};
+template<IntType a> struct Eval<bno<Int<a> > > {
+    typedef Int<~a> value;
+};
+template<class A> struct Eval<bno<A> > {
+    typedef typename Eval<bno<typename Eval<A>::value > >::value value;
 };
 
 
