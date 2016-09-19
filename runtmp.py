@@ -16,7 +16,7 @@ else:
 with open(sys.argv[1]) as f:
     prog = f.read()
 
-allowedCh = "abcdefghijklmnopqstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_ \t\r\n<>,'"
+allowedCh = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_ \t\r\n<>,'"
 for ch in prog:
     if ch not in allowedCh:
         print 'Illegal char:', ch
